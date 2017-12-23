@@ -26,7 +26,7 @@ int main(int argc, char const *argv[]) {
   /** 清屏 **/
   system("clear");
 
-  
+
   std::string username,password;
 
   std::cout << "Please enter your number or admin account : " << '\n';
@@ -35,11 +35,20 @@ int main(int argc, char const *argv[]) {
   std::cout << "Please enter your password : " << '\n';
   std::cin >> password;
 
-  if(LoginLibrarySystem(static_cast<const std::string>(username),
-   static_cast<const std::string>(password))) {
-    std::cout << "OK" << '\n';
-  } else {
-    std::cout << "NO" << '\n';
+  std::string alias;
+  int n;
+
+  if( (n = LoginLibrarySystem(static_cast<const std::string>(username),
+   static_cast<const std::string>(password), alias)) < 0) {
+
+    std::cout << "username or password error !" << '\n';
+    return 0;
+  } else if(n == 0){    //管理员账号登录
+
+    InterfaceMain(alias, true);
+
+  } else {      //学生登录
+    InterfaceMain(alias, false);
   }
 
 

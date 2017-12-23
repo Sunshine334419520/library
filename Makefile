@@ -2,29 +2,42 @@
 # @Date:   2017-12-14T17:42:42+08:00
 # @Email:  guang334419520@126.com
 # @Filename: Makefile
-# @Last modified by:   YangGuang
-# @Last modified time: 2017-12-14T19:15:56+08:00
+# @Last modified by:   sunshine
+# @Last modified time: 2017-12-23T15:49:19+08:00
 
 
 RESULT = main
-OBJ = Main.o login.o MysqlInterface.o
+OBJ = Main.o login.o MysqlInterface.o Book.o AdministerPerson.o StudentUser.o	\
+			hash.o
 CC = g++
-FLAGS = -Wall -g -std=c++11
+FLAGS = -Wall -g -std=c++11 -Iinclude/ -Imysqlinterface/
 INCLUDE = /usr/local/Cellar/mysql/5.7.20/include/mysql/
 LIB = /usr/local/Cellar/mysql/5.7.20/lib/
 
 $(RESULT): $(OBJ)
 	$(CC) $(FLAGS) -o $(RESULT) $(OBJ) -I$(INCLUDE) -L$(LIB) -lmysqlclient
 
-Main.o:Main.cc
+Main.o:lib/Main.cc
 	$(CC) $(FLAGS) -c $<
 
 
-login.o:login.cc
+login.o:lib/login.cc
 	$(CC) $(FLAGS) -c $< -I$(INCLUDE)
 
 MysqlInterface.o:mysqlinterface/MysqlInterface.cc
 	$(CC) $(FLAGS) -c $< -I$(INCLUDE)
+
+Book.o: lib/Book.cc
+	$(CC) $(FLAGS) -c $< -I$(INCLUDE)
+
+AdministerPerson.o: lib/AdministerPerson.cc
+	$(CC) $(FLAGS) -c $< -I$(INCLUDE)
+
+StudentUser.o: lib/StudentUser.cc
+	$(CC) $(FLAGS) -c $< -I$(INCLUDE)
+
+hash.o: lib/hash.cc
+	$(CC) $(FLAGS) -c $<
 
 
 .PHONY: clean cleanall

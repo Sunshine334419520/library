@@ -3,8 +3,8 @@
  * @Date:   2017-12-14T15:26:36+08:00
  * @Email:  guang334419520@126.com
  * @Filename: MysqlInterface.cc
- * @Last modified by:   YangGuang
- * @Last modified time: 2017-12-14T19:02:00+08:00
+ * @Last modified by:   sunshine
+ * @Last modified time: 2017-12-16T15:37:01+08:00
  */
 
 
@@ -52,6 +52,16 @@ bool MysqlInterface::CreateDatabase(std::string &data_name)
 
   ErrorMysqlInfo();
   return false;
+}
+
+bool MysqlInterface::CreateTable(const std::string &table_name)
+{
+  if(mysql_query(&mysqlinterface_, table_name.c_str()) != 0) {
+    ErrorMysqlInfo();
+    return false;
+  }
+
+  return true;
 }
 
 
@@ -136,7 +146,7 @@ void MysqlInterface::PrintErrorInfo() const
 
 }
 
-void MysqlInterface::CloseDatabase() 
+void MysqlInterface::CloseDatabase()
 {
   mysql_close(&mysqlinterface_);
 }
