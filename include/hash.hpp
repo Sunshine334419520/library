@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: hash.hpp
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-23T15:29:04+08:00
+ * @Last modified time: 2017-12-24T22:28:46+08:00
  */
 
 #ifndef LIBRARY_HASH_H
@@ -22,6 +22,8 @@ enum string_code {
   eSeting,
   eBorrowing,
   eReturn,
+  eExit,
+  eDefault,
 };
 
 typedef string_code hash_t;

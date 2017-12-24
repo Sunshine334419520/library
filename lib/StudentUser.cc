@@ -4,11 +4,12 @@
  * @Email:  guang334419520@126.com
  * @Filename: StudentUser.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-23T18:01:27+08:00
+ * @Last modified time: 2017-12-24T21:48:28+08:00
  */
 
 
 #include "StudentUser.hpp"
+#include "MysqlInterface.hpp"
 #include "Book.hpp"
 #include "user.hpp"
 #include "AdministerPerson.hpp"
@@ -17,19 +18,19 @@
 using namespace std;
 using namespace user;
 
-inline StudentUser::StudentUser():
-  name_(nullptr), number_(nullptr),
-  department_(nullptr), alias_(nullptr),
-  Books_(nullptr)
+StudentUser::StudentUser()
   {
-    Books_ = new std::vector<Book>;
+    //name_ = nullptr;
+    //number_ =nullptr;
+    //department_ = nullptr;
+    Books_ = new std::vector<Book>();
   }
 
 /**
  * Get person information
  * @return void
  */
-inline
+
 void StudentUser::GetPersonInfo() const
 {
   cout << "name: " << this->name_ << endl;
@@ -46,7 +47,7 @@ void StudentUser::GetPersonInfo() const
  * @param  theDepartment your department
  * @return               void
  */
-inline
+//inline
 void StudentUser::SetPersonInfo(const std::string& theName,
                                 const std::string& theNumber,
                                 const std::string& theDepartment,
@@ -268,22 +269,44 @@ void StudentUser::ShowBooks() const
 /**
  * show help information
  */
-inline void GetHelpInfo()
+void user::GetHelpInfo()
 {
-  cout << "'ls' : " << "Show all books" << endl;
-  cout << "- - - - - - - - -- - - - - - - -";
-  cout << "'find' : " << "Find books" << endl;
-  cout << "- - - - - - - - -- - - - - - - -";
-  cout << "'bw' : " << "Brrowing books" << endl;
-  cout << "- - - - - - - - -- - - - - - - -";
-  cout << "'return' : " << "Return books" << endl;
-  cout << "- - - - - - - - -- - - - - - - -";
-  cout << "'show' : " << "Show Person info" << endl;
-  cout << "- - - - - - - - -- - - - - - - -";
-  cout << "'password' : " << "Change your the password" << endl;
-  cout << "- - - - - - - - -- - - - - - - -";
-  cout << "'set' : " << "Seting person info" << endl;
-  cout << "'help' : " << "Show help info" << endl;
+  cout << "\t\t\t\t\t\t** Student Command **" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'ls' : " << "Show all books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'find' : " << "Find books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'bw' : " << "Brrowing books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'return' : " << "Return books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'show' : " << "Show Person info" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'password' : " << "Change your the password" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'set' : " << "Seting person info" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'help' : " << "Show help info" << endl;
+  cout << "\t\t\t\t\t\t** Admin Command **" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'ls' : " << "Show all books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'find' : " << "Find books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'remove' : " << "Remove books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'modify' : " << "Modify books" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'add' : " << "add a book" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'show' : " << "Show Person info" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'password' : " << "Change your the password" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'set' : " << "Seting person info" << endl;
+  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t~~" << "'help' : " << "Show help info" << endl;
 
 }
 
@@ -293,7 +316,7 @@ inline void GetHelpInfo()
  * @return       true , false
  */
 
-bool ReadAllBook(std::vector<Book>* books)
+bool user::ReadAllBook(std::vector<Book>* books)
 {
   MysqlInterface mysql;
 

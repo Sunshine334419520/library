@@ -3,8 +3,8 @@
  * @Date:   2017-12-13T21:58:30+08:00
  * @Email:  guang334419520@126.com
  * @Filename: Main.cc
- * @Last modified by:   YangGuang
- * @Last modified time: 2017-12-14T19:19:38+08:00
+ * @Last modified by:   sunshine
+ * @Last modified time: 2017-12-24T16:00:05+08:00
  */
 
 
@@ -21,6 +21,7 @@ const char* kDataBase = "library";
 
 
 
+
 int main(int argc, char const *argv[]) {
 
   /** 清屏 **/
@@ -29,10 +30,10 @@ int main(int argc, char const *argv[]) {
 
   std::string username,password;
 
-  std::cout << "Please enter your number or admin account : " << '\n';
+  std::cout << "Please enter your number or admin account : ";
   std::cin >> username;
 
-  std::cout << "Please enter your password : " << '\n';
+  std::cout << "Please enter your password : ";
   std::cin >> password;
 
   std::string alias;

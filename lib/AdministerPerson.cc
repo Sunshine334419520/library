@@ -5,7 +5,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: AdministerPerson.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-23T17:57:06+08:00
+ * @Last modified time: 2017-12-24T22:26:10+08:00
  */
 
 #include "AdministerPerson.hpp"
@@ -17,10 +17,10 @@ using namespace admin;
 
 AdministerPerson::AdministerPerson()
 {
-  Books_ = new list<Book>;
+  Books_ = new list<Book>();
   ReadAllBook(Books_);
 
-  mysql_ = new MysqlInterface;
+  mysql_ = new MysqlInterface();
 
   if(!mysql_->ConnectDatabase(kHostName, kUserName, kPassWord, kDataBase)) {
     mysql_->PrintErrorInfo();
@@ -61,9 +61,9 @@ void AdministerPerson::ShowBrrowReturnInfo() const
 
 bool AdministerPerson::SetPersonInfo(const std::string& theAlias)
 {
-
-  string sql = "update admin alias = " + theAlias +
-  "where username = " + this->alias_;
+  std::string str = "\"";
+  string sql = "update admin set alias = " + str + theAlias + str +
+  "where username = " + str + "root" + str;
 
   if(!mysql_->ModifyData(sql)) {
     mysql_->PrintErrorInfo();
@@ -204,7 +204,7 @@ bool AdministerPerson::ModifyBook(const Book& theBook)
   * @param  books save data
   * @return       true , false
   */
- bool ReadAllBook(std::list<Book>* books)
+ bool admin::ReadAllBook(std::list<Book>* books)
  {
    MysqlInterface mysql;
 
@@ -217,6 +217,10 @@ bool AdministerPerson::ModifyBook(const Book& theBook)
    std::vector<std::vector<string> > results;
    if(!mysql.ReadData(sql, results)) {
      mysql.PrintErrorInfo();
+     return false;
+   }
+
+   if(results.empty()) {
      return false;
    }
 

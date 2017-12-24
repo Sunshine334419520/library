@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: login.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-23T17:58:12+08:00
+ * @Last modified time: 2017-12-24T22:32:28+08:00
  */
 
 
@@ -56,14 +56,16 @@ int LoginLibrarySystem(const std::string& username,
 
    std::string sql;
    size_t return_value = -1;
+
    if(username[0] > '1' && username[0] <'9') {
       sql = "select * from users where number=" +
             username + " and password=" + password;
 
       return_value = 1;
    } else {
+     std::string str = "\'";
      sql = "select * from admin where username=" +
-            username + " and password=" + password;
+            str + username + str + " and password=" + str + password + str;
 
      return_value = 0;
    }
@@ -78,7 +80,7 @@ int LoginLibrarySystem(const std::string& username,
      return -1;
    }
 
-   alias = result[0][2];
+   alias = result[0][3];
 
    mysql.CloseDatabase();
 
@@ -94,78 +96,98 @@ int LoginLibrarySystem(const std::string& username,
  */
 void InterfaceMain(const std::string& alias, bool flags)
 {
-  cout << "%%[" << alias << "]> ";
-  std::string command;
-  while(cin >> command) {
-    if(flags == true) {
+  std::string str = "\"";
 
-      /*
-      MysqlInterface mysql;
-      if(!mysql.ConnectDatabase(kHostName, kUserName, kPassWord, kDataBase)) {
+  if(flags == true) {
+
+    /*
+    MysqlInterface mysql;
+    if(!mysql.ConnectDatabase(kHostName, kUserName, kPassWord, kDataBase)) {
+    mysql.PrintErrorInfo();
+    return ;
+  }
+
+  std::string sql = "select * from userinfo where alias=" + alias;
+  std::vector<std::vector<std::string> > result;
+  if(!mysql.ReadData(sql, result)) {
+  mysql.PrintErrorInfo();
+  return ;
+}
+*/
+
+AdministerPerson root;
+root.SetPersonInfo(alias);
+
+cout << "%%[" << alias << "]> ";
+std::string command;
+while(cin >> command) {
+  RemoveFirstLastSpace(command);    //去除行首和行尾空格
+  AdminCommandParse(command, root);
+  cout << "%%[" << alias << "]> ";
+}
+
+
+}
+else {
+  MysqlInterface mysql;
+
+  if(!mysql.ConnectDatabase(kHostName, kUserName, kPassWord, kDataBase)) {
+    mysql.PrintErrorInfo();
+    return ;
+  }
+
+
+  std::string sql = "select * from userinfo where alias=" + str + alias + str;
+  std::vector<std::vector<std::string> > result;
+  if(!mysql.ReadData(sql, result)) {
+    mysql.PrintErrorInfo();
+    return ;
+  }
+
+  StudentUser student;
+
+  if(result.empty()) {
+    cout << "Please input your name : ";
+    string name;
+    cin >>  name;
+
+    cout << "Please input your student id: ";
+    string id;
+    cin >> id;
+
+    cout << "Please input your college: ";
+    string college;
+    cin >> college;
+
+    student.SetPersonInfo(name, id, college, alias);
+    sql = "insert into userinfo(alias, name, number, department) values(" +
+    str + alias + str + "," + str + name + str + "," + str + id + str +
+    "," + str + college + str + ")";
+    if(!mysql.WriteData(sql)) {
       mysql.PrintErrorInfo();
       return ;
     }
 
-    std::string sql = "select * from userinfo where alias=" + alias;
-    std::vector<std::vector<std::string> > result;
-    if(!mysql.ReadData(sql, result)) {
-    mysql.PrintErrorInfo();
-    return ;
-  }
-  */
-
-      AdministerPerson root;
-      root.SetPersonInfo(alias);
-
-
-      RemoveFirstLastSpace(command);    //去除行首和行尾空格
-      AdminCommandParse(command, root);
-
-    }
-    else {
-      MysqlInterface mysql;
-
-      if(!mysql.ConnectDatabase(kHostName, kUserName, kPassWord, kDataBase)) {
-        mysql.PrintErrorInfo();
-        return ;
-      }
-
-      std::string sql = "select * from userinfo where alias=" + alias;
-      std::vector<std::vector<std::string> > result;
-      if(!mysql.ReadData(sql, result)) {
-        mysql.PrintErrorInfo();
-        return ;
-      }
-
-      user::StudentUser student;
-
-      if(result.empty()) {
-        cout << "Please input your name :";
-        string name;
-        cin >>  name;
-
-        cout << "Please input your student id:";
-        string id;
-        cin >> id;
-
-        cout << "Please input your college:";
-        string college;
-        cin >> college;
-
-        student.SetPersonInfo(name, id, college, alias);
-      } else {
-        student.SetPersonInfo(result[0][1],
-                              result[0][2], result[0][3], alias);
-      }
-
-      RemoveFirstLastSpace(command);
-      StudentCmdParse(command, student);
-
+  } else {
+    student.SetPersonInfo(result[0][1],
+      result[0][2], result[0][3], alias);
     }
 
+    mysql.CloseDatabase();
 
     cout << "%%[" << alias << "]> ";
+    std::string command;
+    while(cin >> command) {
+      RemoveFirstLastSpace(command);
+      StudentCmdParse(command, student);
+      cout << "%%[" << alias << "]> ";
+    }
+
   }
+
+
+
+
 
 }
 
@@ -266,6 +288,7 @@ AdminCommandParse(const std::string& command, AdministerPerson& root)
     case eHelp:
     {
       GetHelpInfo();
+      break;
     }
     case ePassword:
     {
@@ -283,13 +306,22 @@ AdminCommandParse(const std::string& command, AdministerPerson& root)
 
       root.SetPersonInfo(new_alias);
     }
-    default:
+    case eExit:
+      exit(0);
+    case eDefault:
     {
       std::cerr << command_main << ": without this command,"
                 "Please input the \"help\" view the help info " << '\n';
 
       break;
 
+    }
+    default:
+    {
+      std::cerr << command_main << ": without this command,"
+                "Please input the \"help\" view the help info " << '\n';
+
+      break;
     }
   }
 
@@ -369,13 +401,20 @@ StudentCmdParse(const std::string& command,StudentUser& student)
       GetHelpInfo();
       break;
     }
-    default:
+    case eDefault:
     {
       std::cerr << command << ": without this command," <<
                 "Please input the 'help' view the help info " << '\n';
 
       break;
 
+    }
+    default:
+    {
+      std::cerr << command << ": without this command,"
+                "Please input the \"help\" view the help info " << '\n';
+
+      break;
     }
 
   }

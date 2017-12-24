@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: hash.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-23T15:18:12+08:00
+ * @Last modified time: 2017-12-24T22:29:27+08:00
  */
 
 #include <iostream>
@@ -24,4 +24,8 @@ hash_t hashit(std::string const& inString)
   if(inString == "bw") return eBorrowing;
   if(inString == "return") return eReturn;
   if(inString == "show") return eShow;
+  if(inString == "quit" || inString == "exit")
+    return eExit;
+
+  return eDefault;
 }

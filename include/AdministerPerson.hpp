@@ -5,7 +5,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: AdministerPerson.hpp
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-23T17:52:03+08:00
+ * @Last modified time: 2017-12-24T15:59:00+08:00
  */
 
 #ifndef LIBRARY_ADMINISTERPERSON_H
@@ -16,7 +16,7 @@
 #include <sstream>
 #include <list>
 #include "Book.hpp"
-
+using namespace std;
 
 class Book;
 class MysqlInterface;

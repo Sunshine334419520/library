@@ -4,115 +4,115 @@
  * @Email:  guang334419520@126.com
  * @Filename: Book.c
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-23T15:55:21+08:00
+ * @Last modified time: 2017-12-23T23:10:46+08:00
  */
 
 
 #include "Book.hpp"
 #include <iostream>
 
-inline
+//inline
 const Book::name_type& Book::GetBookName() const
 {
   return this->name_;
 }
 
 
-inline
+//inline
 const Book::author_type& Book::GetBookAuthor() const
 {
   return this->author_;
 }
 
 
-inline
+//inline
 const Book::class_type& Book::GetBookClass() const
 {
   return this->major_;
 }
 
 
-inline
-const std::string& Book::GetBookCreators() const
+//inline
+std::string Book::GetBookCreators() const
 {
     return this->creators_;
 }
 
 
-inline
+//inline
 const Book::date_type& Book::GetBookData() const
 {
   return this->publication_data_;
 }
 
-inline
+//inline
 Book::size_type Book::GetBookPrice() const
 {
   return this->price_;
 }
 
 
-inline
+//inline
 Book::size_type Book::GetBookSize() const
 {
   return this->size_;
 }
 
 
-inline
+//inline
 const std::string& Book::GetBookNumber() const
 {
   return this->number_;
 }
 
-inline
+//inline
 void Book::SetBookName(const name_type& theName)
 {
   this->name_ = theName;
 }
 
 
-inline
+//inline
 void Book::SetBookAuthor(const author_type& theAuthor)
 {
   this->author_ = theAuthor;
 }
 
 
-inline
+//inline
 void Book::SetBookClass(const class_type& theClass)
 {
   this->major_ = theClass;
 }
 
 
-inline
+//inline
 void Book::SetBookCreators(const std::string& theCreators)
 {
   this->creators_ = theCreators;
 }
 
 
-inline
+//inline
 void Book::SetBookData(const date_type& theData)
 {
   this->publication_data_ = theData;
 }
 
 
-inline
+//inline
 void Book::SetBookNumber(const std::string& theNumber)
 {
   this->number_ = theNumber;
 }
 
-inline
+//inline
 void Book::SetBookPrice(size_type thePrice)
 {
   this->price_ = thePrice;
 }
 
-inline
+//inline
 void Book::SetBookSize(size_type theSize)
 {
   this->size_ = theSize;
@@ -140,4 +140,5 @@ void Book::SetBookSize(size_type theSize)
    os << item.number_ << '\t';
    os.width(6);
    os << item.size_;
+   return os;
  }
