@@ -4,13 +4,15 @@
  * @Email:  guang334419520@126.com
  * @Filename: Main.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-24T16:00:05+08:00
+ * @Last modified time: 2017-12-25T22:06:24+08:00
  */
 
 
 #include "login.hpp"
+//#include "Password.hpp"
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include <stdlib.h>
 using namespace std;
 
@@ -33,8 +35,15 @@ int main(int argc, char const *argv[]) {
   std::cout << "Please enter your number or admin account : ";
   std::cin >> username;
 
-  std::cout << "Please enter your password : ";
-  std::cin >> password;
+
+   password = getpass("Please enter your password : ");
+  /*
+  cout << "Please enter your password : ";
+  cin >> password;
+  */
+  //passwd.InputPassword();
+
+  //password = passwd.GetPassword();
 
   std::string alias;
   int n;

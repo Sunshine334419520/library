@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: StudentUser.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-24T21:48:28+08:00
+ * @Last modified time: 2017-12-25T21:53:32+08:00
  */
 
 
@@ -24,6 +24,7 @@ StudentUser::StudentUser()
     //number_ =nullptr;
     //department_ = nullptr;
     Books_ = new std::vector<Book>();
+    ReadAllBook(Books_);
   }
 
 /**
@@ -33,10 +34,17 @@ StudentUser::StudentUser()
 
 void StudentUser::GetPersonInfo() const
 {
-  cout << "name: " << this->name_ << endl;
-  cout << "number_: " << this->number_ << endl;
-  cout << "department_: " << this->department_ << endl;
-  cout << "alias: " << this->alias_ << endl;
+  cout << "\t\t- - - - -  Person information  - - - - -" << endl;
+  cout << endl;
+  cout << "\t\t\t   ~name : " << this->name_ << endl;
+
+  cout << "\t\t\t   number_ : " << this->number_ << endl;
+
+  cout << "\t\t\t   department_ : " << this->department_ << endl;
+
+  cout << "\t\t\t   alias : " << this->alias_ << endl;
+  cout << endl;
+  cout << "\t\t- - - - - - - - - - - - - - - - - - - - -" << endl;
 }
 
 
@@ -91,7 +99,7 @@ bool StudentUser::SetPassword(const std::string& thePassword)
  * @param       name The book name
  * @return      yes return book object，else reutrn null object
  */
-bool StudentUser::SearchBook(const Book::name_type& name, Book* theBook) const
+bool StudentUser::SearchBook(const Book::name_type& name, Book** theBook) const
 {
   /*
 
@@ -104,7 +112,7 @@ bool StudentUser::SearchBook(const Book::name_type& name, Book* theBook) const
 
   for(auto& book : *Books_) {
     if(book.GetBookName() == name) {
-      theBook = new Book(book);
+      *theBook = new Book(book);
       return true;
     }
   }
@@ -150,7 +158,7 @@ bool StudentUser::SearchBook(const Book::author_type& author,
  * @param  book_class The class name
  * @return            succeed vector , else nullptr
  */
-const std::vector<Book>* StudentUser::SearchBook(const Book::class_type& book_class) const
+std::vector<Book>* StudentUser::SearchBook(const Book::class_type& book_class) const
 {
   /*
   if(Books_ == nullptr) {
@@ -179,7 +187,7 @@ bool StudentUser::BorrowingBook(const Book::name_type& name)
 {
   Book* sear_result = nullptr;
 
-  if(!SearchBook(name, sear_result))
+  if(!SearchBook(name, &sear_result))
     return false;
 
   if(sear_result == nullptr)
@@ -200,6 +208,7 @@ bool StudentUser::BorrowingBook(const Book::name_type& name)
     return false;
   }
   mysql.CloseDatabase();
+  delete sear_result;
   return true;
 
 }
@@ -271,41 +280,41 @@ void StudentUser::ShowBooks() const
  */
 void user::GetHelpInfo()
 {
-  cout << "\t\t\t\t\t\t** Student Command **" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t** Student Command **" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'ls' : " << "Show all books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'find' : " << "Find books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'bw' : " << "Brrowing books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'return' : " << "Return books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'show' : " << "Show Person info" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'password' : " << "Change your the password" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'set' : " << "Seting person info" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'help' : " << "Show help info" << endl;
-  cout << "\t\t\t\t\t\t** Admin Command **" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t** Admin Command **" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'ls' : " << "Show all books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'find' : " << "Find books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'remove' : " << "Remove books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'modify' : " << "Modify books" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'add' : " << "add a book" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'show' : " << "Show Person info" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'password' : " << "Change your the password" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'set' : " << "Seting person info" << endl;
-  cout << "\t\t\t~~" << "- - - - - - - - -- - - - - - - -" << endl;
+  cout << "\t\t\t" << "- - - - - - - - -- - - - - - - -" << endl;
   cout << "\t\t\t~~" << "'help' : " << "Show help info" << endl;
 
 }
@@ -336,12 +345,12 @@ bool user::ReadAllBook(std::vector<Book>* books)
 
   for(const auto& book : results) {
 
-    Book::size_type price = admin::StringToNumber<int>(book[3]);
-    Book::size_type pages = admin::StringToNumber<int>(book[7]);
+    Book::size_type price = admin::StringToNumber<int>(book[4]);
+    Book::size_type pages = admin::StringToNumber<int>(book[8]);
 
-    Book tmpbook(book[0], book[1], book[2],
-                 price, book[4], book[5],
-                 book[6], pages);
+    Book tmpbook(book[1], book[2], book[3],
+                 price, book[5], book[6],
+                 book[7], pages);
 
 
     books->push_back(tmpbook);

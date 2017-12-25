@@ -4,7 +4,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: login.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-24T22:32:28+08:00
+ * @Last modified time: 2017-12-25T22:09:26+08:00
  */
 
 
@@ -274,15 +274,22 @@ AdminCommandParse(const std::string& command, AdministerPerson& root)
     case eModify:
     {
       const Book book = InputBookInfo();
-      root.ModifyBook(book);
+      std::cout << "Please input number of the need change " << '\n';
+      std::string number;
+      cin >> number;
+      root.ModifyBook(number, book);
       break;
     }
     case eFind:
     {
       Book::name_type name;
-      std::cin >> name;
+      std::cout << "Please input [ name ] for search books : ";
+      cin.ignore();
+      getline(cin, name);
       Book* book = nullptr;
       root.SearchBook(name, book);
+      cout << *book << endl;
+      delete book;
       break;
     }
     case eHelp:
@@ -305,8 +312,11 @@ AdminCommandParse(const std::string& command, AdministerPerson& root)
 
 
       root.SetPersonInfo(new_alias);
+
+      break;
     }
     case eExit:
+      std::cout << "Bye" << '\n';
       exit(0);
     case eDefault:
     {
@@ -345,22 +355,95 @@ StudentCmdParse(const std::string& command,StudentUser& student)
     }
     case eFind:
     {
-      Book::name_type name;
-      std::cin >> name;
-      student.SearchBook(name);
+    search:
+      std::cout << "\t\t- - - - - - - Search - - - - - - -" << '\n';
+      std::cout << "\t\t\tSearch by title，Please input [1]! " << '\n';
+      std::cout << "\t\t\tSearch by class，Please input [2]! " << '\n';
+      std::cout << "\t\t\tSearch by author，Please input [3]! " << '\n';
+      std::cout << "\t\t- - - - - - - - - - - - - - - - - " << '\n';
+      int n;
+      cin >> n;
+      switch (n) {
+        case 1:
+        {
+          std::cout << "Please input [ name ] for search books : ";
+          Book::name_type name;
+          cin.ignore();                 // 清除cin留下的\n让getline正常运作
+          std::getline(std::cin, name);
+          Book* book = nullptr;
+          /* false 代表没有查询结果 */
+          if(!student.SearchBook(name, &book)) {
+            std::cout << "Without book name !!! " << name << endl;
+            break;
+          }
+          cout << *book << endl;
+          delete book;
+          break;
+        }
+        case 2:
+        {
+          std::cout << "Please input [ class ] for search books : ";
+          Book::class_type class_name;
+
+          cin.ignore();                     // 清除cin留下的\n让getline正常运作
+
+          std::getline(std::cin, class_name);
+
+          std::vector<Book>* find_result = student.SearchBook(class_name);
+          /* nullptr就是没有查询结果 */
+          if(find_result == nullptr) {
+            std::cout << "Without book name !!! " << class_name << endl;
+
+          }
+          /* 遍历结果并输出  */
+          for(const auto& book : *find_result) {
+            cout << book << endl;
+          }
+
+          delete find_result;
+          break;
+        }
+        case 3:
+        {
+          std::cout << "Please input [ author ] for search books : ";
+          Book::author_type author_name;
+          cin.ignore();
+          std::getline(std::cin, author_name);
+          std::vector<Book> author_result;      //用于存放查询结果
+
+          if(!student.SearchBook(author_name, author_result)) {
+            std::cout << "Without book name !!! " << author_name << endl;
+          }
+
+          for(const auto& book : author_result) {
+            cout << book << endl;
+          }
+
+          break;
+        }
+        default:
+          goto search;
+      }
+
+
       break;
+
     }
     case eBorrowing:
     {
       Book::name_type name;
-      std::cin >> name;
+      std::cout << "Please input [ name ] for borrowing books : ";
+      cin.ignore();
+      std::getline(cin, name);
       student.BorrowingBook(name);
       break;
     }
     case eReturn:
     {
       std::string number;
-      std::cin >> number;
+      std::cout << "Please input [ number ] for return books : ";
+      cin.ignore();
+      std::getline(cin, number);
       student.ReturnBook(number);
       break;
     }
@@ -372,7 +455,9 @@ StudentCmdParse(const std::string& command,StudentUser& student)
     case ePassword:
     {
       std::string password;
-      cin >> password;
+      std::cout << "Please input [ password ] for change password : ";
+      cin.ignore();
+      std::getline(cin, password);
       student.SetPassword(password);
       break;
     }
@@ -401,6 +486,9 @@ StudentCmdParse(const std::string& command,StudentUser& student)
       GetHelpInfo();
       break;
     }
+    case eExit:
+      std::cout << "Bye" << '\n';
+      exit(0);
     case eDefault:
     {
       std::cerr << command << ": without this command," <<
@@ -425,15 +513,17 @@ static Book InputBookInfo()
 {
   Book::name_type name;
   std::cout << "Please input the name of a book : ";
-  cin >> name;
+  cin.ignore();
+  getline(cin, name);
 
   Book::author_type author;
-  std::cout << "Please input the name of the author :";
-  cin >> author;
+  std::cout << "Please input the name of the author : ";
+  getline(cin, author);
 
   std::string creators;
   std::cout << "Please input the Publishing house of the book : ";
-  cin >> creators;
+  getline(cin, creators);
+
 
   Book::size_type price;
   std::cout << "Please input the price of the book : ";
@@ -441,15 +531,16 @@ static Book InputBookInfo()
 
   Book::date_type data;
   std::cout << "Please input the production date of the book : ";
-  cin >> data;
+  getline(cin, data);
+
 
   Book::class_type book_class;
   std::cout << "Please input the type of the book : ";
-  cin >> book_class;
+  getline(cin, book_class);
 
   std::string number;
   std::cout << "Please input the number of the book : ";
-  cin >> number;
+  getline(cin, number);
 
   Book::size_type pages;
   std::cout << "Please input number of pages of the book : ";

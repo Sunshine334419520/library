@@ -5,7 +5,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: AdministerPerson.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-24T22:26:10+08:00
+ * @Last modified time: 2017-12-25T19:01:02+08:00
  */
 
 #include "AdministerPerson.hpp"
@@ -17,6 +17,7 @@ using namespace admin;
 
 AdministerPerson::AdministerPerson()
 {
+  str_ = "\"";
   Books_ = new list<Book>();
   ReadAllBook(Books_);
 
@@ -61,9 +62,9 @@ void AdministerPerson::ShowBrrowReturnInfo() const
 
 bool AdministerPerson::SetPersonInfo(const std::string& theAlias)
 {
-  std::string str = "\"";
-  string sql = "update admin set alias = " + str + theAlias + str +
-  "where username = " + str + "root" + str;
+
+  string sql = "update admin set alias = " + str_ + theAlias + str_ +
+  "where username = " + str_ + "root" + str_;
 
   if(!mysql_->ModifyData(sql)) {
     mysql_->PrintErrorInfo();
@@ -77,8 +78,8 @@ bool AdministerPerson::SetPersonInfo(const std::string& theAlias)
 
 bool AdministerPerson::SetPassword(const std::string& thePassword)
 {
-  string sql = "update admin password = " + thePassword + " " +
-  "where alias = " + this->alias_;
+  string sql = "update admin set password = " + str_ + thePassword +
+                str_ + " " + "where alias = " + str_ + this->alias_ + str_;
 
   if(!mysql_->ModifyData(sql)) {
     mysql_->PrintErrorInfo();
@@ -90,19 +91,22 @@ bool AdministerPerson::SetPassword(const std::string& thePassword)
 
 bool AdministerPerson::AddBook(const Book& theBook)
 {
-   string sql = "insert into Books(alias, number) values(" +
-                 theBook.GetBookName() + "," +
-                 theBook.GetBookAuthor() + "," +
-                 theBook.GetBookCreators() + ",";
+   string sql = "insert into Books(name, author, creators, price, publicdata, class, number, pages) values(" +
+                 str_ + theBook.GetBookName() + str_ + "," +
+                 str_ + theBook.GetBookAuthor() + str_ + "," +
+                 str_ + theBook.GetBookCreators() + str_ + ",";
 
-   ostringstream ostr_sql(sql);
+   ostringstream ostr_sql;
 
-   ostr_sql << theBook.GetBookPrice() << "," << theBook.GetBookData() << "," \
-            << theBook.GetBookClass() << "," << theBook.GetBookNumber() << "," \
-            << theBook.GetBookSize() << ")";
+   ostr_sql << sql;
+   ostr_sql << str_ << theBook.GetBookPrice() << str_ << ","        \
+            << str_ << theBook.GetBookData() << str_ << ","         \
+            << str_ << theBook.GetBookClass() << str_ << ","        \
+            << str_ << theBook.GetBookNumber() << str_ << ","       \
+            << str_ << theBook.GetBookSize() << str_ << ")";
 
 
-
+   cout << ostr_sql.str() << endl;
    if(!mysql_->WriteData(ostr_sql.str())) {
      mysql_->PrintErrorInfo();
      return false;
@@ -112,18 +116,22 @@ bool AdministerPerson::AddBook(const Book& theBook)
  }
 
 
-bool AdministerPerson::ModifyBook(const Book& theBook)
+bool AdministerPerson::ModifyBook(const string& old_number, const Book& new_book)
 {
-   string sql = "update into Books name = " + theBook.GetBookName() + " " +
-                "author = " + theBook.GetBookAuthor() + " " +
-                "creators = " + theBook.GetBookCreators() + " ";
+   string sql = "update into Books set name = " +
+                str_ + new_book.GetBookName() + str_ + " " +
+                "author = " + str_ + new_book.GetBookAuthor() + str_ + " " +
+                "creators = " + str_ + new_book.GetBookCreators() + str_;
+
+  ostringstream ostr_sql(sql);
+  ostr_sql << " price = "<< str_ << new_book.GetBookPrice() << str_          \
+           << " publicdata = "<< str_ << new_book.GetBookData() << str_       \
+           << " class = "<< str_ << new_book.GetBookClass() << str_          \
+           << " number = "<< str_ << new_book.GetBookNumber() << str_        \
+           << " pages = "<< str_ << new_book.GetBookSize() << str_           \
+           << "where number = " << str_ << old_number << str_;
 
 
-   ostringstream ostr_sql;
-   ostr_sql << sql;
-   ostr_sql << theBook.GetBookPrice() << "," << theBook.GetBookData() << "," \
-            << theBook.GetBookClass() << "," << theBook.GetBookNumber() << "," \
-            << theBook.GetBookSize() << ")";
 
   if(!mysql_->ModifyData(ostr_sql.str())) {
     mysql_->PrintErrorInfo();
@@ -137,7 +145,7 @@ bool AdministerPerson::ModifyBook(const Book& theBook)
 
  bool AdministerPerson::RemoveBook(const std::string& theNumber)
  {
-   string sql = "delete from Books where number = " + theNumber;
+   string sql = "delete from Books where number = " + str_ + theNumber + str_;
 
    if(!mysql_->ModifyData(sql)) {
      mysql_->PrintErrorInfo();
@@ -227,11 +235,11 @@ bool AdministerPerson::ModifyBook(const Book& theBook)
    mysql.CloseDatabase();
 
    for(const auto& book : results) {
-     Book::size_type price = StringToNumber<int>(book[3]);
-     Book::size_type pages = StringToNumber<int>(book[7]);
-     Book tmpbook(book[0], book[1], book[2],
-               price, book[4], book[5],
-               book[6], pages);
+     Book::size_type price = StringToNumber<int>(book[4]);
+     Book::size_type pages = StringToNumber<int>(book[8]);
+     Book tmpbook(book[1], book[2], book[3],
+               price, book[5], book[6],
+               book[7], pages);
 
 
      books->push_back(tmpbook);

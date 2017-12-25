@@ -5,7 +5,7 @@
  * @Email:  guang334419520@126.com
  * @Filename: AdministerPerson.hpp
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-24T15:59:00+08:00
+ * @Last modified time: 2017-12-25T18:45:25+08:00
  */
 
 #ifndef LIBRARY_ADMINISTERPERSON_H
@@ -35,7 +35,7 @@ namespace admin {
     bool SetPassword(const std::string&);
 
     bool AddBook(const Book&);
-    bool ModifyBook(const Book&);
+    bool ModifyBook(const std::string&, const Book&);
     bool RemoveBook(const std::string&);
     bool SearchBook(const Book::name_type&, Book*) const;
 
@@ -44,6 +44,8 @@ namespace admin {
 
     MysqlInterface* mysql_;
     std::list<Book>* Books_;
+
+    std::string str_;
   };
 
 bool ReadAllBook(std::list<Book>* books);

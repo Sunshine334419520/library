@@ -3,7 +3,7 @@
 # @Email:  guang334419520@126.com
 # @Filename: Makefile
 # @Last modified by:   sunshine
-# @Last modified time: 2017-12-23T22:39:01+08:00
+# @Last modified time: 2017-12-25T17:47:07+08:00
 
 
 RESULT = main
@@ -14,7 +14,7 @@ INCLUDE = /usr/local/Cellar/mysql/5.7.20/include/mysql/
 LIB = /usr/local/Cellar/mysql/5.7.20/lib/
 
 $(RESULT): $(OBJ)
-	$(CC) $(FLAGS) -o $(RESULT) $(OBJ) -L$(LIB) -lmysqlclient
+	$(CC) $(FLAGS) -o $(RESULT) $(OBJ) -L$(LIB) -lmysqlclient -lcurses
 
 Main.o:lib/Main.cc
 	$(CC) $(FLAGS) -c $<

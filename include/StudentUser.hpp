@@ -4,7 +4,7 @@
 * @Email:  guang334419520@126.com
 * @Filename: StudentUser.hpp
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-24T15:45:38+08:00
+ * @Last modified time: 2017-12-25T21:53:40+08:00
 */
 
 
@@ -28,9 +28,9 @@ namespace user {
     void ShowBooks() const;
 
     /*  搜索图书  */
-    bool SearchBook(const Book::name_type&, Book*) const;
+    bool SearchBook(const Book::name_type&, Book**) const;
     bool SearchBook(const Book::author_type&, std::vector<Book>&) const;
-    const std::vector<Book>* SearchBook(const Book::class_type&) const;
+    std::vector<Book>* SearchBook(const Book::class_type&) const;
 
 
     /*  获得个人信息  */

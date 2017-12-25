@@ -4,13 +4,17 @@
  * @Email:  guang334419520@126.com
  * @Filename: hash.cc
  * @Last modified by:   sunshine
- * @Last modified time: 2017-12-24T22:29:27+08:00
+ * @Last modified time: 2017-12-25T22:03:03+08:00
  */
 
 #include <iostream>
 #include "hash.hpp"
 
-
+/**
+ * 字符串转换成枚举类型，用来实现字符串switch
+ * @param  inString [description]
+ * @return          [description]
+ */
 hash_t hashit(std::string const& inString)
 {
   if(inString == "ls") return eLs;
